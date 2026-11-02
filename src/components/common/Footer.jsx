@@ -61,7 +61,7 @@ export function Footer() {
             <a href="https://www.linkedin.com/pulse/personal-portfolio-lokasani-venkata-pavan-kumar-reddy--zfimf" target="_blank" rel="noopener noreferrer" className="social-pill" aria-label="LinkedIn Profile">
               <span>LinkedIn</span>
             </a>
-            <a href="mailto:pavan@example.com" className="social-pill" aria-label="Send Email">
+            <a href="mailto:l.pavanreddy9989@gmail.com" className="social-pill" aria-label="Send Email">
               <span>Email</span>
             </a>
           </div>

@@ -78,7 +78,7 @@ The application is structured into four primary modules:
   - Email and Password credentials authentication with Show/Hide toggle.
   - "Remember email" checkbox.
   - Validates credentials against `portfolio_users` without leaking account existence.
-  - Pre-seeded Demo Administrator helper button (`admin@portfolio.com` / `Admin123`).
+  - Pre-seeded Demo Administrator helper button (`l.pavanreddy9989@gmail.com` / `Admin123`).
   - Sets active authenticated session in `portfolio_current_user` (strictly sanitized: **no passwords stored in session**).
   - Role-based automatic routing: `admin` &rarr; `/admin`, `user` &rarr; `/user`.
 - **Route Guards (`RequireAuth`, `RequireAdmin`, `RequireGuest`)**:
@@ -242,7 +242,7 @@ npx vercel --prod
 | **03** | **Contact Form Submission** | Fill name, email, subject, message in Contact section and submit | Success banner appears; inquiry is added to `portfolio_messages` in Local Storage. |
 | **04** | **Client Registration** | Navigate to `/signup`, fill details with valid password and submit | Strength meter displays progress; user is added to `portfolio_users` and redirected to `/login`. |
 | **05** | **Duplicate Email Prevention** | Attempt to sign up again with the same email | Displays error: *"An account with this email already exists."* |
-| **06** | **Demo Admin Login** | At `/login`, click "Auto-Fill" (or enter `admin@portfolio.com` / `Admin123`) and click Sign In | Redirects to `/admin`; Admin Console renders with metrics and CRUD managers. |
+| **06** | **Demo Admin Login** | At `/login`, click "Auto-Fill" (or enter `l.pavanreddy9989@gmail.com` / `Admin123`) and click Sign In | Redirects to `/admin`; Admin Console renders with metrics and CRUD managers. |
 | **07** | **Client User Login** | Sign in with registered user credentials | Redirects to `/user`; User Hub displays user profile, bookmarks, and inquiries. |
 | **08** | **Role Route Guard (User &rarr; Admin)** | Log in as user, manually navigate to `/admin` | Access denied; immediately redirected to `/user`. |
 | **09** | **Route Guard (Guest &rarr; Protected)** | Log out, navigate directly to `/admin` or `/user` | Immediately bounced to `/login`. |

@@ -130,11 +130,29 @@ export function setStoredItem(key, value) {
 
 // Initialize Seed Data idempotently
 export function initializeStorage() {
-  // 1. Seed demo admin user if not exists
+  // 1. Seed administrator user if not exists
   const users = getStoredItem(STORAGE_KEYS.USERS, []);
-  const adminExists = users.some(u => u.email.toLowerCase() === 'admin@portfolio.com');
-  if (!adminExists) {
+  const adminEmail = 'l.pavanreddy9989@gmail.com';
+  const existingAdmin = users.find(u => u.email.toLowerCase() === adminEmail);
+
+  if (!existingAdmin) {
     users.unshift({
+      id: 'user_admin_pavan',
+      fullName: 'Venkata Pavan (Admin)',
+      email: adminEmail,
+      password: 'Admin123',
+      role: 'admin',
+      createdAt: '2026-09-24T00:00:00.000Z'
+    });
+    setStoredItem(STORAGE_KEYS.USERS, users);
+  } else if (existingAdmin.role !== 'admin') {
+    existingAdmin.role = 'admin';
+    setStoredItem(STORAGE_KEYS.USERS, users);
+  }
+
+  // Also maintain backward-compatible admin
+  if (!users.some(u => u.email.toLowerCase() === 'admin@portfolio.com')) {
+    users.push({
       id: 'user_admin_01',
       fullName: 'System Administrator',
       email: 'admin@portfolio.com',

@@ -51,7 +51,7 @@ export function LoginPage() {
   };
 
   const fillDemoAdmin = () => {
-    setEmail('admin@portfolio.com');
+    setEmail('l.pavanreddy9989@gmail.com');
     setPassword('Admin123');
     setError('');
   };
@@ -184,7 +184,7 @@ export function LoginPage() {
               </button>
             </div>
             <div className="demo-creds-body">
-              <p><strong>Email:</strong> admin@portfolio.com</p>
+              <p><strong>Email:</strong> l.pavanreddy9989@gmail.com</p>
               <p><strong>Password:</strong> Admin123</p>
               <p className="demo-creds-note">Role: ADMIN (Full Projects, Skills, Blogs & Inbox CRUD)</p>
             </div>

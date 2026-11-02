@@ -86,8 +86,8 @@ export function ContactSection({ onToast }) {
                 <div className="channel-icon">📧</div>
                 <div>
                   <div className="channel-label">Email Address</div>
-                  <a href="mailto:pavan@example.com" className="channel-val">
-                    pavan@example.com
+                  <a href="mailto:l.pavanreddy9989@gmail.com" className="channel-val">
+                    l.pavanreddy9989@gmail.com
                   </a>
                 </div>
               </div>
