@@ -1,362 +1,331 @@
-# Venkata Pavan - Personal Portfolio Website
+# Venkata Pavan - Personal Portfolio & Web Application Platform
 
-> **This project is developed using only HTML, CSS, and Vanilla JavaScript.**
+> **Built with React 19 + Vite 8 and Deployed on Vercel**
 
 ---
 
-## 📖 Project Description
+## 📖 Project Overview
 
-This project is a modern, high-performance, and fully responsive personal developer portfolio website designed for software engineers and full-stack developers. It provides an engaging public showcase of professional experience, technical skills, featured engineering projects, articles, and client contact channels.
+This project is a modern, high-performance web platform built with **React** and **Vite**, featuring a responsive developer portfolio, client-side authentication with browser **Local Storage**, and dedicated **Admin** and **User** workspace modules.
 
-The project is built with clean architecture, strict separation of concerns, WCAG 2.1 AA/AAA accessibility compliance, and persistent theme customization, serving as the foundational client application for an upcoming modular multi-tier portfolio platform.
+The application adheres to clean component architecture, role-based authorization guards, WCAG 2.1 AA/AAA accessibility compliance, persistent theme toggling (dark/light), and seamless deployment configuration for **Vercel**.
 
 ---
 
 ## ⚡ Technologies Used
 
-This project runs 100% natively in the browser without external frameworks, build tools, libraries, or CDNs:
-
-- **HTML5**: Semantic document layout (`<header>`, `<nav>`, `<main>`, `<section>`, `<article>`, `<footer>`), ARIA accessibility roles and landmarks, Schema.org JSON-LD structured metadata, and responsive viewport configuration.
-- **CSS3 (Vanilla CSS)**: Custom design tokens (CSS variables for theming, typography, spacing, elevations, and radius), responsive layout via Flexbox and CSS Grid, fluid media queries, smooth transitions, glassmorphic backdrop filters, and light/dark theme modes.
-- **Vanilla JavaScript (ES6+)**: Pure event-driven DOM manipulation, sticky header scroll detection, mobile navigation drawer with keyboard focus trapping, interactive project category filtering, client-side contact form validation, smooth scrolling, and safe Local Storage state management.
-
----
-
-## 📦 Modules Status
-
-### **Module 1: Project Foundation + Complete Public Home Page (Completed)**
-Module 1 establishes the complete public-facing presentation and foundational architecture:
-1. **Fixed / Sticky Navigation Bar**: Responsive navigation with brand monogram, section navigation links, theme toggle, authentication triggers, and mobile drawer with focus trapping.
-2. **Hero Section**: Dynamic typewriter role cycling, call-to-actions, social links, and vector profile illustration.
-3. **About Me Section**: Professional biography, engineering pillars, and experience/education timeline.
-4. **Skills Section**: Categorized technical proficiency matrix with animated percentage indicators.
-5. **Projects Section**: Interactive filterable project gallery with tech tags and repository links.
-6. **Blog Preview Section**: Technical article cards displaying read times and excerpt previews.
-7. **Achievements & Statistics Section**: Key milestone counters and credibility metrics.
-8. **Contact Preview Section**: Direct contact channels and interactive validated contact form.
-9. **Professional Footer**: Branded footer, quick links, social channels, and back-to-top button.
-10. **State Management & Theming**: Local Storage utility (`PortfolioStorage`) with theme persistence.
-
-### **Module 2: Signup + Local Storage Authentication Foundation (Completed)**
-
-Module 2 implements complete client-side user registration, password strength analysis, and Local Storage data persistence:
-
-1. **Signup Functionality (`pages/signup.html`)**:
-   - Interactive user registration form featuring Full Name, Email, Password, Confirm Password, and Terms & Conditions checkbox.
-   - Dynamic real-time password strength meter (**Weak**, **Medium**, **Strong**) and 4-rule requirements checklist.
-   - Accessible keyboard-friendly Show/Hide password toggle buttons for both password inputs.
-   - Real-time password confirmation match indicator.
-   - Form submission validates input, prevents duplicate emails, persists the user into `localStorage`, and displays an accessible success message before redirecting to `login.html`.
-
-2. **Local Storage Key**:
-   - **Key**: `portfolio_users`
-   - Stored value is an array of registered user objects.
-   - Safe collection CRUD helpers in [`js/storage.js`](file:///c:/Users/pavan/OneDrive/Desktop/Portfolio/js/storage.js): `getUsers()`, `saveUsers()`, `findUserByEmail()`, `addUser()`.
-
-3. **User Object Structure**:
-   ```json
-   {
-     "id": "user_a1b2c3d4e5f6",
-     "fullName": "Jane Doe",
-     "email": "jane@example.com",
-     "password": "Password123",
-     "role": "user",
-     "createdAt": "2026-09-24T06:30:00.000Z"
-   }
-   ```
-   - `id`: Generated via `crypto.randomUUID()` with fallback.
-   - `role`: Strictly assigned `"user"` as the default user role.
-   - `email`: Normalized to lowercase before storage.
-
-4. **Validation Rules & Error Messages**:
-   - **Full Name**: Required, minimum 2 characters, cannot contain only spaces. Error: *"Please enter your full name."*
-   - **Email**: Required, valid email format regex, lowercase normalization. Error: *"Please enter a valid email address."*
-   - **Duplicate Email Prevention**: Checks existing `portfolio_users`. Error: *"An account with this email already exists. Please log in instead."*
-   - **Password**: Minimum 8 characters, at least one uppercase letter (A-Z), at least one lowercase letter (a-z), and at least one number (0-9). Error: *"Password must contain at least 8 characters, including uppercase, lowercase, and a number."*
-   - **Confirm Password**: Strict match (`password === confirmPassword`). Error: *"Passwords do not match."*
-   - **Terms & Conditions**: Checkbox must be selected. Error: *"Please accept the Terms & Conditions."*
-
-5. **Security Limitation Note**:
-   > **Academic / Demonstration Purpose**: This application is a frontend-only project utilizing browser `localStorage`. Real-world production applications must use secure server-side authentication with cryptographic hashing and salt on a backend server, and must never store credentials directly in client-side Local Storage. Passwords are never transmitted over external networks.
-
-6. **How to Test Registration**:
-   - **Step 1**: Open `index.html` or directly open `pages/signup.html` in your web browser.
-   - **Step 2**: Enter valid information (e.g. Full Name: `Alex Morgan`, Email: `alex@example.com`, Password: `Password123`, Confirm: `Password123`), check Terms & Conditions, and click **Create Account**.
-   - **Step 3**: Verify the success alert appears (*"Account created successfully. Redirecting to login..."*) and redirects to `login.html`.
-   - **Step 4**: Open browser DevTools (`F12` → `Application` / `Storage` → `Local Storage`), inspect `portfolio_users`, and verify the stored user array.
-   - **Step 5**: Return to `pages/signup.html` and attempt to register again with `alex@example.com` to verify duplicate rejection.
-
-### **Module 3: Login + Authentication Validation + ADMIN vs USER Routing (Completed)**
-
-Module 3 connects registered users and the demonstration administrator to the interactive Login portal, creates authenticated sessions without sensitive data, enforces role-based routing (`ADMIN` vs `USER`), and establishes strict client-side authentication guards:
-
-1. **Authentication Workflow**:
-   ```
-   START ──► Home Page (index.html)
-     │
-     ▼
-   Login (pages/login.html)
-     │
-     ▼
-   Enter Email + Password
-     │
-     ▼
-   Validate Input (Format & Required fields)
-     │
-     ▼
-   Read Users from Local Storage (`portfolio_users`)
-     │
-     ▼
-   Find Matching User (Email normalized via trim().toLowerCase())
-     │
-     ▼
-   Validate Password
-     │
-     ├──[Invalid] ──► Display: "Invalid email or password." (No account info leaked)
-     │
-     └──[Valid]   ──► Create Session (`portfolio_current_user`, strictly NO password)
-                         │
-                         ▼
-                   Check User Role
-                         │
-                         ├──[role === "admin"] ──► Admin Dashboard (`admin-dashboard.html`)
-                         │
-                         └──[role === "user"]  ──► User Dashboard (`user-dashboard.html`)
-   ```
-
-2. **Login Page (`pages/login.html`)**:
-   - Matches visual aesthetic and CSS theme of Signup and Home Page.
-   - Proper HTML `<form id="loginForm">` with `#loginEmail` and `#loginPassword` inputs.
-   - Fully keyboard-accessible Show/Hide password toggle button.
-   - "Remember Me" checkbox (`#rememberMe`).
-   - Clear validation messages for empty email (*"Please enter your email."*), invalid email format (*"Please enter a valid email address."*), empty password (*"Please enter your password."*), and invalid credentials (*"Invalid email or password."*).
-   - Brief success notice (*"Login successful. Redirecting..."*) before smooth role-based redirection.
-
-3. **Demonstration Admin Account (`initializeAdmin()`)**:
-   - Predefined demonstration account seeded idempotently:
-     - **Email**: `admin@portfolio.com`
-     - **Password**: `Admin123`
-     - **Role**: `admin`
-     - **Label**: Academic / demonstration credentials only.
-   - Stored within `portfolio_users`.
-   - Initialized automatically once upon script startup; never creates duplicate admin records.
-   - Public registration via `signup.html` strictly restricts all signups to `role: "user"`.
-
-4. **Session / Current-User Object**:
-   - **Key**: `portfolio_current_user`
-   - **Critical Rule**: Passwords are **never** included in the session object.
-   ```json
-   {
-     "id": "user_admin_01",
-     "fullName": "System Administrator",
-     "email": "admin@portfolio.com",
-     "role": "admin",
-     "loginTime": "2026-09-24T06:50:00.000Z"
-   }
-   ```
-
-5. **Role-Based Routing & Authentication Guards**:
-   - **Admin Dashboard (`pages/admin-dashboard.html`)**:
-     - Guard: `PortfolioAuth.requireRole("admin")`.
-     - If unauthenticated: immediately redirected to `login.html`.
-     - If normal user (`role === "user"`): redirected to `user-dashboard.html` with warning (*"You do not have permission to access the Admin Dashboard."*).
-     - Displays logged-in admin's name, role badge, email, and working Logout button.
-   - **User Dashboard (`pages/user-dashboard.html`)**:
-     - Guard: `PortfolioAuth.requireAuthentication()`.
-     - If unauthenticated: immediately redirected to `login.html`.
-     - Displays logged-in user's name, role badge, email, and working Logout button.
-
-6. **Logout & Browser Back Button Protection**:
-   - Logout utility (`PortfolioAuth.logout()`) clears `portfolio_current_user` and redirects to `../index.html`.
-   - Protected dashboards verify the session immediately upon page execution, preventing unauthorized access even if navigated to via browser history/back buttons.
-
-7. **Local Storage Keys Summary**:
-   - `portfolio_users`: Array of registered accounts (including demo admin).
-   - `portfolio_current_user`: Active authenticated session object (strictly no password).
-   - `portfolio_theme_mode`: User dark/light UI preference.
-
-8. **Security Limitations Notice**:
-   > **Developer Notice**: This Local Storage authentication is for educational/demo purposes only. Browser-side authentication cannot provide production-level security. Real applications should use secure server-side authentication, password hashing, HTTPS, secure sessions/tokens, and appropriate authorization controls.
-
-9. **Testing Instructions (All 12 Verification Scenarios)**:
-   - **Test 1 — Valid User Login**: Register a user via `signup.html`. Login with matching credentials. Expected: `user-dashboard.html` opens.
-   - **Test 2 — Incorrect Password**: Enter registered email with wrong password. Expected: *"Invalid email or password."*, no access.
-   - **Test 3 — Unknown Email**: Enter non-existent email. Expected: *"Invalid email or password."* (email existence not leaked).
-   - **Test 4 — Admin Login**: Login using demo admin (`admin@portfolio.com` / `Admin123`). Expected: `admin-dashboard.html` opens.
-   - **Test 5 — User Attempts Admin URL**: Login as normal user, navigate directly to `admin-dashboard.html`. Expected: Access denied, redirected to `user-dashboard.html` with permission notice.
-   - **Test 6 — Unauthenticated Admin URL**: Logout, navigate directly to `admin-dashboard.html`. Expected: Redirected to `login.html`.
-   - **Test 7 — Unauthenticated User URL**: Logout, navigate directly to `user-dashboard.html`. Expected: Redirected to `login.html`.
-   - **Test 8 — Logout**: Click Logout on any dashboard. Expected: `portfolio_current_user` is cleared, redirected to `index.html`.
-   - **Test 9 — Refresh Dashboard**: Login and refresh page. Expected: Session persists and dashboard remains accessible.
-   - **Test 10 — Multiple Users**: Register multiple accounts; each logs in to their respective profile independently.
-   - **Test 11 — No Duplicate Admin**: Refresh application multiple times; check `portfolio_users` to confirm only one admin account exists.
-   - **Test 12 — Browser Console**: Check DevTools console; zero uncaught JavaScript errors.
-
-### **Module 4: Admin Dashboard + Content Management (Projects, Skills, Blogs CRUD) (Completed)**
-
-Module 4 establishes an administrative console allowing authenticated administrators to create, preview, edit, search, and delete portfolio content stored natively in browser Local Storage:
-
-1. **Admin Authorization Guard**:
-   - Enforced via `PortfolioAuth.requireRole("admin")` on page load.
-   - Unauthenticated requests are immediately bounced to `login.html`.
-   - Normal users (`role: "user"`) attempting to access the Admin URL are redirected to `user-dashboard.html` with an access-denied alert.
-
-2. **Single-Dashboard Navigation with Dynamic Sections**:
-   - **Sidebar**: Dashboard, Projects, Skills, Blogs, Messages (Module 5 Reserved), Public Portfolio, and Logout.
-   - Switching sections dynamically toggles `#dashboardSection`, `#projectsSection`, `#skillsSection`, `#blogsSection`, and `#messagesSection` without full page reloads.
-   - Preserves deep links via URL hash (`#dashboard`, `#projects`, `#skills`, `#blogs`, `#messages`).
-
-3. **Dynamic Dashboard Statistics**:
-   - Calculates real-time totals from Local Storage:
-     - **Total Projects**: `portfolio_projects.length`
-     - **Total Skills**: `portfolio_skills.length`
-     - **Total Blogs**: `portfolio_blogs.length`
-   - Automatically re-computed whenever items are added, updated, or deleted.
-
-4. **Projects CRUD Management**:
-   - **Key**: `portfolio_projects`
-   - **Schema**: `{ id, title, description, technologies: [], image, projectUrl, githubUrl, createdAt }`
-   - **Form Validation**: Title (required), Description (required), Technologies (comma-separated, at least 1 required).
-   - **Table & Card Display**: Shows thumbnail, title, description, technology pills, created date, and Edit/Delete actions.
-   - **Live Search**: Real-time filtering by project title or technology tag.
-
-5. **Skills CRUD Management**:
-   - **Key**: `portfolio_skills`
-   - **Schema**: `{ id, name, category, level: 0-100, createdAt }`
-   - **Form Validation**: Name (required), Category (required), Level slider (0–100%) with real-time percentage display.
-   - **Visual Progress Bar**: Dynamic progress bar fill calculated directly from the stored level.
-   - **Live Search**: Instant filtering by skill name or category.
-
-6. **Blogs CRUD Management**:
-   - **Key**: `portfolio_blogs`
-   - **Schema**: `{ id, title, excerpt, content, category, author, image, published: true|false, createdAt }`
-   - **Form Validation**: Title (required), Excerpt (required), Content (required), Category (required), Published checkbox.
-   - **Badges**: Visual status indicators (**Published** in green / **Draft** in amber).
-   - **Live Search**: Dynamic filtering by article title, category, or excerpt.
-
-7. **Data Safety & Isolation**:
-   - Each collection operates on its own dedicated Local Storage key.
-   - Adding, modifying, or deleting a project never touches or overwrites users, current session, skills, or blogs.
-
-8. **Sample Data Seeding (`seedInitialData()`)**:
-   - Seeds initial demonstration items (3 projects, 5 skills, 2 blogs) **only if** each respective Local Storage array is empty.
-   - Never overwrites or duplicates Admin-created data across page refreshes.
-
-9. **Modals, Toasts & Accessibility**:
-   - Keyboard accessible modal dialogs with close buttons, backdrop click dismissal, and <kbd>Escape</kbd> key handlers.
-   - Confirmation dialogs for all delete actions to prevent accidental removal.
-   - Accessible floating toast notification banner (`aria-live="polite"`) with automatic dismissal.
+- **React 19**: Declarative, component-driven UI library with hooks (`useState`, `useEffect`, `useContext`, `useCallback`).
+- **Vite 8**: Next-generation frontend build tool providing sub-second Hot Module Replacement (HMR) and optimized rollup production bundles.
+- **Client-Side SPA Routing**: Custom, dependency-free React Router implementation supporting HTML5 History API (`pushState`, `popstate`), scroll restoration, active link styles, and route protection guards.
+- **Vanilla CSS3 Design Tokens**: Comprehensive custom design tokens (CSS variables for theming, typography, elevations, glassmorphic filters, and light/dark theme modes).
+- **Local Storage State Persistence**: Complete client-side database layer with safe JSON serialization, collection CRUD operations, and idempotent seeding.
+- **Vercel Cloud Deployment**: Automated SPA rewrites configuration (`vercel.json`), pre-configured build scripts, and production edge delivery.
 
 ---
 
-## 📁 Folder Structure
+## 📦 Project Modules & Functionalities
+
+The application is structured into four primary modules:
 
 ```
-portfolio-website/
-│
-├── index.html                  # Main entry point & comprehensive public Home Page
-├── README.md                   # Project documentation, specifications & roadmap
-│
-├── css/                        # Modular Vanilla CSS stylesheets
-│   ├── style.css               # Design system tokens, typography, layout, components, and animations
-│   ├── responsive.css          # Responsive breakpoints, media queries, and mobile drawer styles
-│   ├── auth.css                # Authentication forms and user portal styles
-│   └── dashboard.css           # Admin console layout, sidebar, modals, data tables, and toast notifications
-│
-├── js/                         # Modular Vanilla JavaScript files
-│   ├── main.js                 # UI controllers, typewriter, filter tabs, contact form validation, hydration hooks
-│   ├── storage.js              # Centralized Local Storage utility, safe JSON helpers, and collection CRUD
-│   ├── auth.js                 # Authentication interfaces, role validation (ADMIN/USER), and routing helpers
-│   └── admin.js                # Admin dashboard controller, Projects/Skills/Blogs CRUD, search, and modals
-│
-├── pages/                      # Multi-page views
-│   ├── login.html              # User login interface
-│   ├── signup.html             # User registration interface
-│   ├── admin-dashboard.html    # Full Admin management console (Projects, Skills, Blogs CRUD)
-│   └── user-dashboard.html     # User workspace portal (Profile, Saved Projects, Inquiries)
-│
-└── assets/                     # Static assets and media placeholders
-    ├── images/                 # SVG vector mockups & profile placeholder
-    └── icons/                  # Custom icon assets (.gitkeep)
+                          ┌───────────────────────────┐
+                          │   Public Portfolio (/)    │
+                          └─────────────┬─────────────┘
+                                        │
+                         ┌──────────────┴──────────────┐
+                         ▼                             ▼
+                 ┌───────────────┐             ┌───────────────┐
+                 │ Login (/login)│             │Signup(/signup)│
+                 └───────┬───────┘             └───────────────┘
+                         │
+                 Role Verification
+                (portfolio_current_user)
+                         │
+            ┌────────────┴────────────┐
+            ▼                         ▼
+    [role === 'admin']        [role === 'user']
+            │                         │
+            ▼                         ▼
+┌───────────────────────┐ ┌───────────────────────┐
+│ Admin Console (/admin)│ │   User Hub (/user)    │
+├───────────────────────┤ ├───────────────────────┤
+│ • Dashboard Overview  │ │ • Client Profile & PW │
+│ • Projects CRUD       │ │ • Bookmarked Projects │
+│ • Skills CRUD         │ │ • My Inquiries Tracker│
+│ • Blogs CRUD          │ │ • Security & Storage  │
+│ • Messages Inbox      │ └───────────────────────┘
+└───────────────────────┘
+```
+
+### **1. Public Portfolio Module (`/`)**
+- **Hero Section**: Dynamic typewriter role cycling, call-to-actions, live availability status pill, and responsive social channels.
+- **About Me Section**: Professional biography, education/experience timeline, and engineering pillars.
+- **Skills Section**: Dynamic proficiency matrix loaded directly from Local Storage (`portfolio_skills`), featuring filter tabs (All, Frontend, Backend, DevOps, Languages) and animated percentage indicators.
+- **Projects Section**: Featured application gallery loaded from `portfolio_projects` with category filters (All, Full Stack, Frontend, Backend), tech tags, live demo & GitHub repository links, and an interactive **Bookmark button** connected to the User Hub.
+- **Blog Section**: Technical articles loaded from `portfolio_blogs` with estimated read times, author meta, and excerpt previews.
+- **Achievements Section**: Milestone counters and key credibility metrics.
+- **Contact Section & Form**: Validated interactive form (Name, Email, Subject, Message) that submits inquiries directly to `portfolio_messages` in Local Storage with feedback toasts.
+- **Navigation & Footer**: Sticky header with brand monogram, theme toggle (dark/light), authentication triggers, mobile drawer menu, and back-to-top button.
+
+### **2. Authentication Module (`/login` & `/signup`)**
+- **Client-Side Registration (`/signup`)**:
+  - Full Name, Email, Password, Confirm Password, and Terms & Conditions acceptance.
+  - Real-time password strength meter (**Weak**, **Medium**, **Strong**) and 4-rule requirements checklist (8+ chars, uppercase, lowercase, number).
+  - Show/Hide password toggle buttons for accessible typing.
+  - Real-time password confirmation match indicator.
+  - Validates inputs, prevents duplicate emails, persists registered users into `portfolio_users` with default role `"user"`, and displays success notices before redirecting to `/login`.
+- **Client-Side Login (`/login`)**:
+  - Email and Password credentials authentication with Show/Hide toggle.
+  - "Remember email" checkbox.
+  - Validates credentials against `portfolio_users` without leaking account existence.
+  - Pre-seeded Demo Administrator helper button (`admin@portfolio.com` / `Admin123`).
+  - Sets active authenticated session in `portfolio_current_user` (strictly sanitized: **no passwords stored in session**).
+  - Role-based automatic routing: `admin` &rarr; `/admin`, `user` &rarr; `/user`.
+- **Route Guards (`RequireAuth`, `RequireAdmin`, `RequireGuest`)**:
+  - Prevents unauthenticated visitors from accessing protected pages.
+  - Prevents normal users (`role: "user"`) from accessing the Admin Console.
+  - Prevents logged-in users from seeing login/signup pages.
+
+### **3. Admin Management Module (`/admin`)**
+- **Protected Console**: Guarded by `RequireAdmin`. Unauthenticated visitors bounce to `/login`; unauthorized users are redirected to `/user`.
+- **Dashboard Overview**: Real-time metrics counters (Total Projects, Total Skills, Total Blogs, Inquiries, Active Users), quick action shortcuts, and Local Storage collection status.
+- **Projects CRUD Management**:
+  - Create new projects with title, description, category, comma-separated technologies, live demo URL, and GitHub repository URL.
+  - Edit existing projects with pre-filled form modal.
+  - Delete projects with confirmation safety modal.
+  - Live search filtering by title or technology tag.
+- **Skills CRUD Management**:
+  - Create, edit, and delete skills with visual proficiency level slider (10%–100%) and category assignment (Frontend, Backend, DevOps, Languages).
+  - Real-time percentage progress bar preview.
+- **Blogs CRUD Management**:
+  - Author and edit technical articles with title, excerpt, full markdown content, category, read time, and **Published / Draft status toggle**.
+  - Live search by title, excerpt, or category.
+- **Messages / Contact Inquiries Inbox**:
+  - View inquiries dispatched from the public Contact form (`portfolio_messages`).
+  - Filter inquiries by All, Unread, or Read.
+  - Message preview modal with one-click `mailto:` reply generator.
+  - Delete inquiries with confirmation modal.
+
+### **4. User Workspace Module (`/user`)**
+- **Protected Client Hub**: Guarded by `RequireAuth`.
+- **User Banner**: Active user initials avatar, full name, email, and role badge (`ROLE: USER`).
+- **Client Profile Tab**:
+  - View account identifier, email, assigned role, and login timestamp.
+  - Edit full name dynamically.
+  - Change password with old password verification and strength analysis.
+- **Saved Projects Tab**:
+  - View bookmarked portfolio projects saved from the public showcase.
+  - Direct access to live demos and GitHub source repositories.
+  - Remove projects from bookmarks.
+- **My Inquiries Tab**:
+  - Real-time tracking of inquiries submitted by this user.
+  - Status indicators (**Pending Review** / **Reviewed by Admin**).
+  - Direct "New Inquiry" modal to send collaboration proposals to the admin.
+- **Security & Storage Tab**:
+  - Visual inspector displaying the sanitized session payload.
+  - Explanation of client-side authentication guards and session handling.
+
+---
+
+## 🗄️ Local Storage Keys & Data Schema
+
+| Storage Key | Type | Description |
+| :--- | :--- | :--- |
+| `portfolio_theme_mode` | String | User theme preference (`"dark"` or `"light"`) |
+| `portfolio_users` | Array&lt;User&gt; | Registered user accounts (including seeded demo admin) |
+| `portfolio_current_user` | Object | Active authenticated session (sanitized, **no password**) |
+| `portfolio_projects` | Array&lt;Project&gt; | Featured portfolio projects collection |
+| `portfolio_skills` | Array&lt;Skill&gt; | Technical skills and proficiency percentages |
+| `portfolio_blogs` | Array&lt;Blog&gt; | Technical articles and publication status |
+| `portfolio_messages` | Array&lt;Message&gt; | Contact inquiries and collaboration requests |
+| `portfolio_bookmarks` | Object | Map of user IDs to arrays of bookmarked project IDs |
+
+---
+
+## 🚀 How to Run Locally
+
+### Prerequisites
+- Node.js (v18.0.0 or higher recommended)
+- npm, pnpm, or yarn
+
+### 1. Installation
+Clone or navigate to the repository directory:
+```bash
+git clone https://github.com/venkatapavan78/Portfolio.git
+cd Portfolio
+```
+
+Install dependencies:
+```bash
+npm install
+```
+
+### 2. Run the Development Server
+```bash
+npm run dev
+```
+Open your browser at `http://localhost:3000` to interact with the application.
+
+### 3. Build for Production
+```bash
+npm run build
+```
+The optimized production bundle is generated in the `dist/` directory.
+
+### 4. Preview the Production Build
+```bash
+npm run preview
 ```
 
 ---
 
-## 🚀 How to Run the Project
+## 🌐 Vercel Deployment Guide
 
-No web servers, package managers, compilers, or build steps are required.
+The project is configured for deployment to [Vercel](https://vercel.com).
 
-1. Clone or download the repository to your local machine:
+### Deployment Configuration Included:
+- **`vercel.json`**:
+  ```json
+  {
+    "buildCommand": "npm run build",
+    "outputDirectory": "dist",
+    "cleanUrls": true,
+    "rewrites": [
+      {
+        "source": "/(.*)",
+        "destination": "/index.html"
+      }
+    ]
+  }
+  ```
+  *(The SPA rewrite rule ensures refreshing routes like `/login`, `/admin`, or `/user` on Vercel resolves correctly without 404 errors).*
+
+### Option A: Automatic Git Deployment via Vercel Dashboard (Recommended)
+
+1. Push your updated code to your GitHub repository:
    ```bash
-   git clone https://github.com/venkatapavan78/Portfolio.git
+   git add .
+   git commit -m "feat: complete React + Vite migration with Admin, User, Auth and Vercel config"
+   git push origin main
    ```
-2. Navigate to the project directory:
-   ```bash
-   cd Portfolio
-   ```
-3. Open `index.html` directly in any modern web browser (Google Chrome, Microsoft Edge, Mozilla Firefox, Safari, Brave, Opera):
-   - **Windows**: Double-click `index.html` or run `start index.html` in PowerShell/Command Prompt.
-   - **macOS**: Run `open index.html` in Terminal.
-   - **Linux**: Run `xdg-open index.html` in Terminal.
+2. Log in to [Vercel](https://vercel.com) with your GitHub account.
+3. Click **Add New...** &rarr; **Project**.
+4. Import your `Portfolio` repository (`https://github.com/venkatapavan78/Portfolio`).
+5. Vercel automatically detects the framework as **Vite**:
+   - **Framework Preset**: `Vite`
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `dist`
+6. Click **Deploy**. Vercel will build and assign your live production URL (e.g. `https://portfolio-venkatapavan.vercel.app`).
 
-The application loads instantly via the `file:///` protocol.
+### Option B: Deploy Using Vercel CLI
+
+If you have the Vercel CLI installed:
+```bash
+# 1. Log in to your Vercel account
+npx vercel login
+
+# 2. Deploy preview build
+npx vercel
+
+# 3. Deploy to production
+npx vercel --prod
+```
 
 ---
 
-## 🔮 Future Modules Roadmap
+## 🧪 Verification Scenarios (Testing Guide)
 
-The application architecture has been designed so that future features can be integrated sequentially:
+| Test ID | Scenario | Steps | Expected Result |
+| :---: | :--- | :--- | :--- |
+| **01** | **Public Portfolio Showcase** | Open `/` in browser | Home page renders with Navbar, Hero typewriter, About, Skills, Projects, Blog, Contact, and Footer. |
+| **02** | **Dark / Light Theming** | Click sun/moon toggle in Navbar | UI switches immediately between dark Obsidian and light Slate mode; preference persists across reload. |
+| **03** | **Contact Form Submission** | Fill name, email, subject, message in Contact section and submit | Success banner appears; inquiry is added to `portfolio_messages` in Local Storage. |
+| **04** | **Client Registration** | Navigate to `/signup`, fill details with valid password and submit | Strength meter displays progress; user is added to `portfolio_users` and redirected to `/login`. |
+| **05** | **Duplicate Email Prevention** | Attempt to sign up again with the same email | Displays error: *"An account with this email already exists."* |
+| **06** | **Demo Admin Login** | At `/login`, click "Auto-Fill" (or enter `admin@portfolio.com` / `Admin123`) and click Sign In | Redirects to `/admin`; Admin Console renders with metrics and CRUD managers. |
+| **07** | **Client User Login** | Sign in with registered user credentials | Redirects to `/user`; User Hub displays user profile, bookmarks, and inquiries. |
+| **08** | **Role Route Guard (User &rarr; Admin)** | Log in as user, manually navigate to `/admin` | Access denied; immediately redirected to `/user`. |
+| **09** | **Route Guard (Guest &rarr; Protected)** | Log out, navigate directly to `/admin` or `/user` | Immediately bounced to `/login`. |
+| **10** | **Admin Projects CRUD** | In `/admin`, create a project, edit its title, and delete it | Projects table and public home page update instantly in Local Storage. |
+| **11** | **Admin Inbox Review** | In `/admin`, open Messages tab, read message, click Reply | Message marked as read; unread badge counter decreases; mailto link opens email client. |
+| **12** | **User Bookmarks** | On home page, click bookmark star on a project | Project is saved to User Hub under Saved Projects tab; can be removed at any time. |
+| **13** | **Production Build** | Run `npm run build` in terminal | Vite builds clean `dist/` bundle with zero errors in &lt; 500ms. |
+| **14** | **Vercel Deep Routing** | Navigate directly to `/admin` or `/user` on Vercel deployment | `vercel.json` rewrites resolve to `/index.html`; route opens cleanly without 404. |
+
+---
+
+## 📂 Project Structure
 
 ```
-START
-  │
-  ▼
-Home Page (index.html) ◄── [Module 1: Complete Public Presentation]
-  │
-  ▼
-Signup / Login (pages/signup.html & pages/login.html) ◄── [Module 2]
-  │
-  ▼
-Local Storage Authentication (portfolio_users, portfolio_session) ◄── [Module 2]
-  │
-  ▼
-Role Validation (ADMIN vs USER) ◄── [Module 2]
-  │
-  ├──► [ADMIN Role] ──► Admin Dashboard (pages/admin-dashboard.html) ◄── [Module 4]
-  │                            │
-  │                            ├──► Projects CRUD (portfolio_projects)
-  │                            ├──► Skills CRUD (portfolio_skills)
-  │                            ├──► Blogs CRUD (portfolio_blogs)
-  │                            └──► Admin ──► Messages Inbox (portfolio_messages) ◄── [Module 5]
-  │                                                  ▲
-  │                                                  │ (Contact Inquiries)
-  │                                                  │
-  └──► [USER Role]  ──► User Dashboard (pages/user-dashboard.html) ◄── [Module 3]
-                               │
-                               ├──► Bookmarked Projects
-                               └──► Collaboration Inquiries
-                                      │
-                                      ▼
-                                Public Portfolio (index.html) ◄── [Dynamic Local Storage Hydration]
-                                      │
-                                      ▼
-                                Contact Form (Submits to portfolio_messages)
-                                      │
-                                      ▼
-                                Admin ──► Messages Review
+Portfolio/
+├── index.html                   # Vite HTML5 entry point
+├── package.json                 # Project dependencies & npm scripts
+├── vite.config.js               # Vite build & server configuration
+├── vercel.json                  # Vercel SPA rewrites & deployment configuration
+├── .gitignore                   # Git exclusion rules (node_modules, dist, temp)
+├── public/
+│   └── assets/                  # Public assets, images, and SVG illustrations
+├── src/
+│   ├── main.jsx                 # React root mount
+│   ├── App.jsx                  # Main router, route guards, and layout setup
+│   ├── context/
+│   │   ├── AuthContext.jsx      # Authentication, registration, session, and role state
+│   │   └── ThemeContext.jsx     # Dark/light theme state & document attribute sync
+│   ├── router/
+│   │   └── Router.jsx           # Clean SPA router (BrowserRouter, Routes, Route, Link, etc.)
+│   ├── services/
+│   │   └── storage.js           # Centralized Local Storage abstraction, schema & CRUD APIs
+│   ├── components/
+│   │   └── common/
+│   │       ├── Navbar.jsx       # Responsive header with monogram, navigation & auth triggers
+│   │       ├── Footer.jsx       # Footer with quick links, social profiles & back to top
+│   │       ├── Modal.jsx        # Accessible dialog component with backdrop & keyboard exit
+│   │       ├── Toast.jsx        # Animated floating alert notification banner
+│   │       ├── ThemeToggle.jsx  # Dark/light switcher button
+│   │       └── ProtectedRoute.jsx # Role-based route authorization guards
+│   ├── modules/
+│   │   ├── public/              # 1. Public Portfolio Module
+│   │   │   ├── HomePage.jsx
+│   │   │   └── components/
+│   │   │       ├── HeroSection.jsx
+│   │   │       ├── AboutSection.jsx
+│   │   │       ├── SkillsSection.jsx
+│   │   │       ├── ProjectsSection.jsx
+│   │   │       ├── BlogSection.jsx
+│   │   │       ├── AchievementsSection.jsx
+│   │   │       └── ContactSection.jsx
+│   │   ├── auth/                # 2. Authentication Module
+│   │   │   ├── LoginPage.jsx
+│   │   │   └── SignupPage.jsx
+│   │   ├── admin/               # 3. Admin Management Module
+│   │   │   ├── AdminDashboard.jsx
+│   │   │   └── sections/
+│   │   │       ├── DashboardOverview.jsx
+│   │   │       ├── ProjectsManager.jsx
+│   │   │       ├── SkillsManager.jsx
+│   │   │       ├── BlogsManager.jsx
+│   │   │       └── MessagesManager.jsx
+│   │   └── user/                # 4. User Workspace Module
+│   │       ├── UserDashboard.jsx
+│   │       └── tabs/
+│   │           ├── ProfileTab.jsx
+│   │           ├── BookmarksTab.jsx
+│   │           ├── MyInquiriesTab.jsx
+│   │           └── SecurityTab.jsx
+│   └── styles/
+│       ├── style.css            # Base design tokens, CSS variables & typography
+│       ├── responsive.css       # Responsive breakpoints & media queries
+│       ├── auth.css             # Authentication cards & form inputs
+│       ├── dashboard.css        # Admin console tables, sidebar & badges
+│       └── app.css              # React component styling, modals & tabs
+└── legacy-vanilla/              # Preserved archive of initial vanilla HTML/CSS/JS files
 ```
 
-### Completed & Planned Modules Overview:
+---
 
-- **Module 1: Project Foundation + Complete Public Home Page (Completed)**
-- **Module 2: Signup + Local Storage Authentication Foundation (Completed)**
-- **Module 3: Login + Authentication Validation + ADMIN vs USER Routing (Completed)**
-- **Module 4: Admin Dashboard + Content Management (Projects, Skills, Blogs CRUD) (Completed)**
-  - Full Create, Read, Update, Delete (CRUD) operations for Featured Projects (`portfolio_projects`).
-  - Technical skills catalog and dynamic proficiency level management (`portfolio_skills`).
-  - Editorial markdown blog authoring, drafting, and publication (`portfolio_blogs`).
-  - Real-time statistics, live search filtering, responsive modal dialogs, and toast notifications.
-- **Module 5: Dynamic Public Portfolio Integration (Next Recommended Module)**
-  - Automatic dynamic hydration of public portfolio pages (`index.html`) from Local Storage (`portfolio_projects`, `portfolio_skills`, `portfolio_blogs`) with static fallback.
-  - Contact form integration syncing client inquiries into `portfolio_messages`.
-  - Admin inbox for reviewing, filtering, marking as read, and managing inquiries sent via the Contact Form.
+## 👤 Author
+
+**Venkata Pavan**  
+- Software Engineer & Full-Stack Developer  
+- **GitHub**: [https://github.com/venkatapavan78](https://github.com/venkatapavan78)  
+- **LinkedIn**: [Personal Portfolio Showcase](https://www.linkedin.com/pulse/personal-portfolio-lokasani-venkata-pavan-kumar-reddy--zfimf)  
